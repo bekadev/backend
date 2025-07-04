@@ -1,0 +1,249 @@
+tags:
+  - name: Videos
+    description: API for managing videos
+
+paths:
+  /api/videos:
+    get:
+      summary: Get a list of all videos
+      tags: [ Videos ]
+      responses:
+        200:
+          description: List of all videos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Video'
+    post:
+      summary: Add a new video
+      tags: [ Videos ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoInput'
+      responses:
+        201:
+          description: The video was successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+        400:
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+
+  /api/videos/{id}:
+    get:
+      summary: Get a video by ID
+      tags: [ Videos ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: "The unique identifier of the video"
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: The requested video
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+        404:
+          description: Video not found
+    put:
+      summary: Update a video by ID
+      tags: [ Videos ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: "The unique identifier of the video"
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoUpdateInput'
+      responses:
+        204:
+          description: Video updated successfully
+        400:
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        404:
+          description: Video not found
+    delete:
+      summary: Delete a video by ID
+      tags: [ Videos ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: "The unique identifier of the video"
+          schema:
+            type: integer
+            example: 1
+      responses:
+        204:
+          description: Video deleted successfully
+        404:
+          description: Video not found
+
+components:
+  schemas:
+    Video:
+      type: object
+      required:
+        - id
+        - title
+        - author
+        - canBeDownloaded
+        - minAgeRestriction
+        - createdAt
+        - publicationDate
+        - availableResolutions
+      properties:
+        id:
+          type: integer
+          description: "The unique identifier for the video"
+          example: 1
+        title:
+          type: string
+          description: "The title of the video"
+          example: "Test Video"
+        author:
+          type: string
+          description: "The author of the video"
+          example: "Test Author"
+        canBeDownloaded:
+          type: boolean
+          description: "Can the video be downloaded?"
+          example: true
+        minAgeRestriction:
+          type: integer
+          nullable: true
+          description: "Minimum age restriction for the video"
+          example: 18
+        createdAt:
+          type: string
+          format: date-time
+          description: "The date and time when the video was created"
+          example: "2024-07-04T12:00:00Z"
+        publicationDate:
+          type: string
+          format: date-time
+          description: "The date and time when the video was published"
+          example: "2024-07-04T12:00:00Z"
+        availableResolutions:
+          type: array
+          items:
+            type: string
+            enum: [P144, P240, P360, P480, P720, P1080, P1440, P2160]
+          description: "Available resolutions for the video"
+          example: ["P144", "P720"]
+    VideoInput:
+      type: object
+      required:
+        - title
+        - author
+        - canBeDownloaded
+        - minAgeRestriction
+        - createdAt
+        - publicationDate
+        - availableResolutions
+      properties:
+        title:
+          type: string
+          example: "Test Video"
+        author:
+          type: string
+          example: "Test Author"
+        canBeDownloaded:
+          type: boolean
+          example: true
+        minAgeRestriction:
+          type: integer
+          nullable: true
+          example: 18
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-07-04T12:00:00Z"
+        publicationDate:
+          type: string
+          format: date-time
+          example: "2024-07-04T12:00:00Z"
+        availableResolutions:
+          type: array
+          items:
+            type: string
+            enum: [P144, P240, P360, P480, P720, P1080, P1440, P2160]
+          example: ["P144", "P720"]
+    VideoUpdateInput:
+      type: object
+      required:
+        - title
+        - author
+        - canBeDownloaded
+        - minAgeRestriction
+        - createdAt
+        - publicationDate
+        - availableResolutions
+      properties:
+        title:
+          type: string
+          example: "Updated Video"
+        author:
+          type: string
+          example: "Test Author"
+        canBeDownloaded:
+          type: boolean
+          example: true
+        minAgeRestriction:
+          type: integer
+          nullable: true
+          example: 18
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-07-04T12:00:00Z"
+        publicationDate:
+          type: string
+          format: date-time
+          example: "2024-07-04T12:00:00Z"
+        availableResolutions:
+          type: array
+          items:
+            type: string
+            enum: [P144, P240, P360, P480, P720, P1080, P1440, P2160]
+          example: ["P144", "P720"]
+    ValidationErrorResponse:
+      type: object
+      properties:
+        errorsMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Invalid title"
+              field:
+                type: string
+                example: "title" 

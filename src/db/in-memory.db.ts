@@ -1,4 +1,5 @@
 import { Driver, VehicleFeature } from '../drivers/types/driver';
+import {type Videos, availableResolutions} from "../videos/types/videos";
 
 export const db = {
 	drivers: <Driver[]>[
@@ -42,4 +43,14 @@ export const db = {
 			createdAt: new Date(),
 		},
 	],
+	videos: <Videos[]>[{
+		id: 3,
+		title: 'ZOO PARK',
+		author: 'Tom',
+		canBeDownloaded: true, 
+		minAgeRestriction: 20,
+		createdAt: new Date(),
+		publicationDate: '',
+		availableResolutions: ['P144'],
+	}]
 };
